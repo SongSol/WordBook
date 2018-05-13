@@ -12,6 +12,7 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 
     <!-- Fonts -->
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -155,6 +156,40 @@
 </section>
 <!-- /Section: service -->
 <!-- Section: wordbook -->
+<!-- 모달 팝업 -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">新しいワードブック</h4>
+            </div>
+            <div class="modal-body">
+                <input type="text" class="form-control-static" placeholder="漢字" id="kanzi">
+                <input type="text" class="form-control-static" placeholder="ひらがな" id="hiragana">
+                <input type="text" class="form-control-static" placeholder="韓国語" id="korean">
+                <input type="button" class="btn-success btn-sm" value="追加" onclick="add_row()"><br>
+                <span id="list">
+                    <table class="table table-hover">
+                        <thead>
+                            <th><input type="checkbox" id="all_check" name="all_check" class="checkbox checkbox-inline" onclick="check_all()"></th>
+                            <th>漢字</th>
+                            <th>ひらがな</th>
+                            <th>韓国語</th>
+                            <th>削除</th>
+                        </thead>
+                        <tbody id="tbody"> </tbody>
+                    </table>
+                </span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" name="submit" id="submit">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section id="wordbook" class="home-section text-center">
     <div class="heading-about">
         <div class="container">
@@ -176,18 +211,9 @@
                 <hr class="marginbot-50">
             </div>
         </div>
-        <div class="row"><button class="btn btn-skin pull-right" onclick="newWordbook()">New Wordbook</button></div>
-        <div id="popup_layer"
-             style="position:absolute;
-border:double;
-top:100px;
-left:100px;
-width:100px;
-height:100px;
-z-index:1;
-visibility:hidden;
-background-color:white;
-">dfdfdfdf</div>
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+            New WordBook
+        </button>
         <div class="row">
             <div class="col-md-3" style="cursor: pointer;" onclick="location.href='/search'">
                 <div class="wow bounceInUp" data-wow-delay="0.2s">
@@ -280,10 +306,8 @@ background-color:white;
                     <h5>Main Office</h5>
 
                     <address>
-                        <strong>Squas Design, Inc.</strong><br>
-                        Tower 795 Folsom Ave, Beautiful Suite 600<br>
-                        San Francisco, CA 94107<br>
-                        <abbr title="Phone">P:</abbr> (123) 456-7890
+                        <strong>SongSol</strong><br>
+                        <abbr title="Phone">P:</abbr> 010-2680-5634
                     </address>
 
                     <address>
@@ -445,11 +469,61 @@ background-color:white;
 <!-- Custom Theme JavaScript -->
 <script src="js/custom.js"></script>
 <script src="contactform/contactform.js"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
-    function newWordbook() {
-        var layer = document.getElementById("popup_layer");
-        layer.style.visibility="visible"; //반대는 hidden
+    var no = 1;
+    function add_row() {
+        var tbody   = document.getElementById('tbody');
+        var row     = tbody.insertRow(tbody.rows.length);
+        var cell1   = row.insertCell(0);
+        var cell2   = row.insertCell(1);
+        var cell3   = row.insertCell(2);
+        var cell4   = row.insertCell(3);
+        var cell5   = row.insertCell(4);
+        cell1.innerHTML = '<th><input type="checkbox" id="check" name="check" value="${content.IDX}"></th>';
+        cell2.innerHTML = document.getElementById('kanzi').value;
+        cell3.innerHTML = document.getElementById('hiragana').value;
+        cell4.innerHTML = document.getElementById('korean').value;
+        cell5.innerHTML = '<th><input type="button" class="btn-danger btn-sm" value="削除" onclick="del_row(this)"></th>';
+        this.no++;
     }
+
+    function del_row(obj) {
+        $(obj).parent().parent().remove();
+    }
+    
+    $(function () {
+        $('#all_check').click(function() {
+            if($('#all_check').prop('checked')) {
+                $('input[name=check]:checkbox').each(function () {
+                    $(this).prop('checked', true);
+                });
+            } else {
+                $('input[name=check]:checkbox').each(function () {
+                    $(this).prop('checked', false);
+                })
+            }
+        })
+    })
+
+    $("#submit").click(function () {
+        var count    = 0;
+        var wordbook = new Array();
+        var wordtype = new Object();
+        var checkbox = $("input[name=check]:checked");
+        checkbox.each(function (i) {
+            var tr = checkbox.parent().parent().eq(i);
+            var td = tr.children();
+
+            var kanzi     = td.eq(1).text();
+            var hiragana  = td.eq(2).text();
+            var korean    = td.eq(3).text();
+            wordtype.kanzi = kanzi;
+            wordtype.hiragana = hiragana;
+            wordbook.push(wordtype);
+        });
+        console.log(wordbook);
+    });
 </script>
 </body>
 
