@@ -158,29 +158,14 @@
 <!-- Section: wordbook -->
 <!-- 모달 팝업 -->
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content modal-sm">
+            <div class="modal-header modal-sm">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">新しいワードブック</h4>
             </div>
             <div class="modal-body">
-                <input type="text" class="form-control-static" placeholder="漢字" id="kanzi">
-                <input type="text" class="form-control-static" placeholder="ひらがな" id="hiragana">
-                <input type="text" class="form-control-static" placeholder="韓国語" id="korean">
-                <input type="button" class="btn-success btn-sm" value="追加" onclick="add_row()"><br>
-                <span id="list">
-                    <table class="table table-hover">
-                        <thead>
-                            <th><input type="checkbox" id="all_check" name="all_check" class="checkbox checkbox-inline" onclick="check_all()"></th>
-                            <th>漢字</th>
-                            <th>ひらがな</th>
-                            <th>韓国語</th>
-                            <th>削除</th>
-                        </thead>
-                        <tbody id="tbody"> </tbody>
-                    </table>
-                </span>
+                <input type="text" class="form-control" placeholder="ワードブックの名" id="wb_name" name="wb_name"><br>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -213,19 +198,36 @@
         </div>
         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
             New WordBook
-        </button>
-        <div class="row">
-            <div class="col-md-3" style="cursor: pointer;" onclick="location.href='/search'">
-                <div class="wow bounceInUp" data-wow-delay="0.2s">
+        </button><br><br>
+        <div class="row" name="wb_list" id="wb_list">
+                <div class="col-md-3 wow bounceInUp" data-wow-delay="0.2s">
                     <div class="team boxed-grey">
-                        <div class="inner">
-                            <h5>내 단어장</h5>
-                            <p class="subtitle">Pixel Crafter</p>
-                            <div class="avatar"><img src="img/team/1.jpg" alt="" class="img-responsive img-circle" /></div>
+                        <div class="row">
+                            <div class="card border-success mb-3" style="max-width: 25rem;">
+                                <div class="card-header bg-transparent border-success">Header</div>
+                                <div class="card-body text-success">
+                                    <h5 class="card-title">Success card title</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                </div>
+                                <div class="card-footer bg-transparent border-success">Footer</div>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <div class="col-md-3 wow bounceInUp" data-wow-delay="0.2s">
+                    <div class="team boxed-grey">
+                        <div class="row">
+                            <div class="card border-success mb-3" style="max-width: 25rem;">
+                                <div class="card-header bg-transparent border-success">Header</div>
+                                <div class="card-body text-success">
+                                    <h5 class="card-title">Success card title</h5>
+                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                </div>
+                                <div class="card-footer bg-transparent border-success">Footer</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </div>
     </div>
 </section>
@@ -491,39 +493,42 @@
     function del_row(obj) {
         $(obj).parent().parent().remove();
     }
-    
-    $(function () {
-        $('#all_check').click(function() {
-            if($('#all_check').prop('checked')) {
-                $('input[name=check]:checkbox').each(function () {
-                    $(this).prop('checked', true);
-                });
-            } else {
-                $('input[name=check]:checkbox').each(function () {
-                    $(this).prop('checked', false);
-                })
-            }
+
+    $("#submit").click(function (e) {
+        var wb_name = $("#wb_name").val();
+        console.log(wb_name);
+        e.preventDefault();
+        $.post(
+            '/api/wordbook',
+            {'name':wb_name},
+            function (res) {
+                if (res == 'true') {
+                    alert('생성 완료');
+                    window.location.reload();
+                }
+            })
+    });
+
+    $(document).ready(function () {
+        $.get('/api/wordbook',null,function (res) {
+            res.forEach( function (v, i) {
+                $("#wb.list").append("<div class=\"col-md-3 wow bounceInUp\" data-wow-delay=\"0.2s\">\n" +
+                    "                    <div class=\"team boxed-grey\">\n" +
+                    "                        <div class=\"row\">\n" +
+                    "                            <div class=\"card border-success mb-3\" style=\"max-width: 25rem;\">\n" +
+                    "                                <div class=\"card-header bg-transparent border-success\">ssss</div>\n" +
+                    "                                <div class=\"card-body text-success\">\n" +
+                    "                                    <h5 class=\"card-title\">Success card title</h5>\n" +
+                    "                                    <p class=\"card-text\">Some quick example text to build on the card title and make up the bulk of the card's content.</p>\n" +
+                    "                                </div>\n" +
+                    "                                <div class=\"card-footer bg-transparent border-success\">Footer</div>\n" +
+                    "                            </div>\n" +
+                    "                        </div>\n" +
+                    "                    </div>\n" +
+                    "                </div>")
+            })
         })
     })
-
-    $("#submit").click(function () {
-        var count    = 0;
-        var wordbook = new Array();
-        var wordtype = new Object();
-        var checkbox = $("input[name=check]:checked");
-        checkbox.each(function (i) {
-            var tr = checkbox.parent().parent().eq(i);
-            var td = tr.children();
-
-            var kanzi     = td.eq(1).text();
-            var hiragana  = td.eq(2).text();
-            var korean    = td.eq(3).text();
-            wordtype.kanzi = kanzi;
-            wordtype.hiragana = hiragana;
-            wordbook.push(wordtype);
-        });
-        console.log(wordbook);
-    });
 </script>
 </body>
 

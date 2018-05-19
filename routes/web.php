@@ -14,16 +14,3 @@
 Route::get('/', function() {
     return view('main');
 });
-
-Route::get('/search', function() {
-    return view('search');
-});
-
-Route::get('/wordbook', function() {
-    return view('wordbook');
-});
-
-Route::get('/regWordbook', function () {
-    return view('regWordbook');
-});
-Route::resource('/word','MainController');

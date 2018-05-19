@@ -2,10 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\WordBook;
 use Illuminate\Http\Request;
 
-class MainController extends Controller
+class WordBookController extends Controller
 {
+    private $wordbook_model;
+    public function __construct()
+    {
+        $this->wordbook_model = new WordBook();
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -13,7 +20,7 @@ class MainController extends Controller
      */
     public function index()
     {
-        //
+        return $this->wordbook_model->getWordbookList();
     }
 
     /**
@@ -34,7 +41,8 @@ class MainController extends Controller
      */
     public function store(Request $request)
     {
-        return 'true';
+        $this->wordbook_model->regWordBook($request->get('name'));
+        return response()->json('true');
     }
 
     /**
@@ -45,28 +53,7 @@ class MainController extends Controller
      */
     public function show($id)
     {
-        $client_id = "AXMdIMUlU60UrZxEGuYc";
-        $client_secret = "isNo5ortNW";
-        $encText = urlencode($id);
-        $url = "http://jpdic.naver.com/search.nhn?range=all&q=".$encText; // json 결과
-        $is_post = false;
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, $is_post);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $headers = array();
-        $headers[] = "X-Naver-Client-Id: ".$client_id;
-        $headers[] = "X-Naver-Client-Secret: ".$client_secret;
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        $response = curl_exec ($ch);
-        $status_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close ($ch);
-        if($status_code == 200) {
-            echo $response;
-        } else {
-            echo "Error 내용:".$response;
-        }
+        //
     }
 
     /**
