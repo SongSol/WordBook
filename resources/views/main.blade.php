@@ -199,14 +199,14 @@
         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
             New WordBook
         </button><br><br>
-        <div class="row" name="wb_list" id="wb_list">
+        @for($i = 0; $i < 5; $i++)
                 <div class="col-md-3 wow bounceInUp" data-wow-delay="0.2s">
                     <div class="team boxed-grey">
-                        <div class="row">
+                        <div class="row" id="row" name="row">
                             <div class="card border-success mb-3" style="max-width: 25rem;">
                                 <div class="card-header bg-transparent border-success">Header</div>
                                 <div class="card-body text-success">
-                                    <h5 class="card-title">Success card title</h5>
+                                    <h5 class="card-title"></h5>
                                     <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
                                 </div>
                                 <div class="card-footer bg-transparent border-success">Footer</div>
@@ -214,20 +214,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-3 wow bounceInUp" data-wow-delay="0.2s">
-                    <div class="team boxed-grey">
-                        <div class="row">
-                            <div class="card border-success mb-3" style="max-width: 25rem;">
-                                <div class="card-header bg-transparent border-success">Header</div>
-                                <div class="card-body text-success">
-                                    <h5 class="card-title">Success card title</h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <div class="card-footer bg-transparent border-success">Footer</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+        @endfor
         </div>
     </div>
 </section>
@@ -242,7 +229,6 @@
                         <div class="section-heading">
                             <h2>サーチ</h2>
                             <i class="fa fa-2x fa-angle-down"></i>
-
                         </div>
                     </div>
                 </div>
@@ -250,7 +236,6 @@
         </div>
     </div>
     <div class="container">
-
         <div class="row">
             <div class="col-lg-2 col-lg-offset-5">
                 <hr class="marginbot-50">
@@ -511,24 +496,25 @@
 
     $(document).ready(function () {
         $.get('/api/wordbook',null,function (res) {
-            res.forEach( function (v, i) {
-                $("#wb.list").append("<div class=\"col-md-3 wow bounceInUp\" data-wow-delay=\"0.2s\">\n" +
-                    "                    <div class=\"team boxed-grey\">\n" +
-                    "                        <div class=\"row\">\n" +
-                    "                            <div class=\"card border-success mb-3\" style=\"max-width: 25rem;\">\n" +
-                    "                                <div class=\"card-header bg-transparent border-success\">ssss</div>\n" +
-                    "                                <div class=\"card-body text-success\">\n" +
-                    "                                    <h5 class=\"card-title\">Success card title</h5>\n" +
-                    "                                    <p class=\"card-text\">Some quick example text to build on the card title and make up the bulk of the card's content.</p>\n" +
-                    "                                </div>\n" +
-                    "                                <div class=\"card-footer bg-transparent border-success\">Footer</div>\n" +
-                    "                            </div>\n" +
-                    "                        </div>\n" +
-                    "                    </div>\n" +
-                    "                </div>")
-            })
-        })
-    })
+            console.log(res.length);
+            var i = 0;
+            /*var newDiv = window.setInterval(function () {
+                "<div class=\"card border-success mb-3\" style=\"max-width: 25rem;\">\n" +
+                "                                <div class=\"card-header bg-transparent border-success\">Header</div>\n" +
+                "                                <div class=\"card-body text-success\">\n" +
+                "                                    <h5 class=\"card-title\">"+res[i]['name']+"</h5>\n" +
+                "                                    <p class=\"card-text\">Some quick example text to build on the card title and make up the bulk of the card's content.</p>\n" +
+                "                                </div>\n" +
+                "                                <div class=\"card-footer bg-transparent border-success\">Footer</div>\n" +
+                "                            </div>";
+
+                var div = parent.document.createElement('div');
+                div.id = "row";
+                div.innerHTML = new newDiv;
+                parent.document.getElementById("row").appendChild(div);
+            });*/
+        });
+    });
 </script>
 </body>
 </html>

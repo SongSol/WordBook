@@ -18,3 +18,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 Route::resource('/wordbook','WordBookController');
+
+Route::get('/search/{word}','DictionaryController@search');

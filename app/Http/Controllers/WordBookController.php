@@ -40,8 +40,8 @@ class WordBookController extends Controller
      */
     public function store(Request $request)
     {
-        $this->wordbook_model->regWordBook($request->get('name'));
-        return response()->json('true');
+        $result = $this->wordbook_model->regWordBook($request->get('name'));
+        return view('main',['data'=>$result]);
     }
 
     /**
