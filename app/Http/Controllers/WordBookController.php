@@ -12,7 +12,6 @@ class WordBookController extends Controller
     {
         $this->wordbook_model = new WordBook();
     }
-
     /**
      * Display a listing of the resource.
      *
