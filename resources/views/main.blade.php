@@ -174,7 +174,6 @@
         </div>
     </div>
 </div>
-
 <section id="wordbook" class="home-section text-center">
     <div class="heading-about">
         <div class="container">
@@ -190,7 +189,7 @@
             </div>
         </div>
     </div>
-    <div class="container">
+    <div class="container" name="container" id="container"><
         <div class="row">
             <div class="col-lg-2 col-lg-offset-5">
                 <hr class="marginbot-50">
@@ -199,23 +198,8 @@
         <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
             New WordBook
         </button><br><br>
-        @for($i = 0; $i < 5; $i++)
-                <div class="col-md-3 wow bounceInUp" data-wow-delay="0.2s">
-                    <div class="team boxed-grey">
-                        <div class="row" id="row" name="row">
-                            <div class="card border-success mb-3" style="max-width: 25rem;">
-                                <div class="card-header bg-transparent border-success">Header</div>
-                                <div class="card-body text-success">
-                                    <h5 class="card-title"></h5>
-                                    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-                                </div>
-                                <div class="card-footer bg-transparent border-success">Footer</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        @endfor
-        </div>
+        <div id="list" name="list"></div>
+    </div>
     </div>
 </section>
 <!-- /Section: wordbook -->
@@ -481,12 +465,12 @@
 
     $("#submit").click(function (e) {
         var wb_name = $("#wb_name").val();
-        console.log(wb_name);
         e.preventDefault();
         $.post(
             '/api/wordbook',
             {'name':wb_name},
             function (res) {
+                console.log(res);
                 if (res == 'true') {
                     alert('생성 완료');
                     window.location.reload();
@@ -496,23 +480,27 @@
 
     $(document).ready(function () {
         $.get('/api/wordbook',null,function (res) {
-            console.log(res.length);
-            var i = 0;
-            /*var newDiv = window.setInterval(function () {
-                "<div class=\"card border-success mb-3\" style=\"max-width: 25rem;\">\n" +
-                "                                <div class=\"card-header bg-transparent border-success\">Header</div>\n" +
-                "                                <div class=\"card-body text-success\">\n" +
-                "                                    <h5 class=\"card-title\">"+res[i]['name']+"</h5>\n" +
-                "                                    <p class=\"card-text\">Some quick example text to build on the card title and make up the bulk of the card's content.</p>\n" +
-                "                                </div>\n" +
-                "                                <div class=\"card-footer bg-transparent border-success\">Footer</div>\n" +
-                "                            </div>";
-
-                var div = parent.document.createElement('div');
-                div.id = "row";
-                div.innerHTML = new newDiv;
-                parent.document.getElementById("row").appendChild(div);
-            });*/
+            var options = {
+                year: "numeric", month: "short", day: "numeric"
+            };
+            for(var i = 0; i < res.length; i++) {
+                $("#list").append('<div class="col-md-3 wow bounceInUp" data-wow-delay="0.2s" onmouseover="this.classList.toggle(hover);">' +
+                    '                    <div class="team boxed-grey">' +
+                    '                        <div class="row" id="card" name="card">' +
+                    '                            <div class="card border-success mb-6" style="max-width: 25rem;">' +
+                    '                                <div class="card-header bg-transparent border-success"><h3>'+res[i]['name']+'</h3></div>' +
+                    '                                <div class="card-body text-success">' +
+                    '                                    <h5 class="card-title"></h5>' +
+                    '                                    <p class="card-text"><button class="btn btn-info">단어 추가</button><br><p>' +
+                    '                                </div>' +
+                    '                                <div class="card-footer bg-transparent border-success">'+new Date(res[i]['created_at']).toLocaleDateString("ja-JP",options)+'</div>' +
+                    '                            </div>' +
+                    '                        </div>' +
+                    '                    </div>' +
+                    '                </div>'
+                );
+                $()
+            }
         });
     });
 </script>
