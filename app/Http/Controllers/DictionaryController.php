@@ -8,5 +8,6 @@ use App\Http\Controllers\Controller;
 class DictionaryController extends Controller
 {
     public function search ($word) {
+
     }
 }

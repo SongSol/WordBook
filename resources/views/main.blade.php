@@ -156,8 +156,8 @@
 </section>
 <!-- /Section: service -->
 <!-- Section: wordbook -->
-<!-- 모달 팝업 -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<!-- Add Wordbook -->
+<div class="modal fade" id="wordbook_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
         <div class="modal-content modal-sm">
             <div class="modal-header modal-sm">
@@ -168,12 +168,44 @@
                 <input type="text" class="form-control" placeholder="ワードブックの名" id="wb_name" name="wb_name"><br>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" >Close</button>
                 <button type="button" class="btn btn-primary" name="submit" id="submit">Submit</button>
             </div>
         </div>
     </div>
 </div>
+<!-- Add Word -->
+<div class="modal fade" id="wordlist_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-lg">
+            <div class="modal-header modal-lg">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">ワード追加</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="no" value="">
+                <input type="text" class="form-control-static" placeholder="漢字" id="kanzi">
+                <input type="text" class="form-control-static" placeholder="ひらがな" id="hiragana">
+                <input type="text" class="form-control-static" placeholder="韓国語" id="korean">
+                <input type="button" class="btn-success btn-sm" value="追加" onclick="add_row()"><br>
+                <table class="table table-hover" id="wordlist">
+                    <thead>
+                    <th>漢字</th>
+                    <th>ひらがな</th>
+                    <th>韓国語</th>
+                    <th>削除</th>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="emptytable">Close</button>
+                <button type="button" class="btn btn-primary" name="submit" id="submit" onclick="sendlist()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <section id="wordbook" class="home-section text-center">
     <div class="heading-about">
         <div class="container">
@@ -189,13 +221,13 @@
             </div>
         </div>
     </div>
-    <div class="container" name="container" id="container"><
+    <div class="container" name="container" id="container">
         <div class="row">
             <div class="col-lg-2 col-lg-offset-5">
                 <hr class="marginbot-50">
             </div>
         </div>
-        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#wordbook_modal">
             New WordBook
         </button><br><br>
         <div id="list" name="list"></div>
@@ -441,7 +473,10 @@
 <script src="js/custom.js"></script>
 <script src="contactform/contactform.js"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+
+
 <script>
+    var now_wordbook = 0;
     var no = 1;
     function add_row() {
         var tbody   = document.getElementById('tbody');
@@ -450,12 +485,10 @@
         var cell2   = row.insertCell(1);
         var cell3   = row.insertCell(2);
         var cell4   = row.insertCell(3);
-        var cell5   = row.insertCell(4);
-        cell1.innerHTML = '<th><input type="checkbox" id="check" name="check" value="${content.IDX}"></th>';
-        cell2.innerHTML = document.getElementById('kanzi').value;
-        cell3.innerHTML = document.getElementById('hiragana').value;
-        cell4.innerHTML = document.getElementById('korean').value;
-        cell5.innerHTML = '<th><input type="button" class="btn-danger btn-sm" value="削除" onclick="del_row(this)"></th>';
+        cell1.innerHTML = document.getElementById('kanzi').value;
+        cell2.innerHTML = document.getElementById('hiragana').value;
+        cell3.innerHTML = document.getElementById('korean').value;
+        cell4.innerHTML = '<th><input type="button" class="btn-danger btn-sm" value="削除" onclick="del_row(this)"></th>';
         this.no++;
     }
 
@@ -463,6 +496,46 @@
         $(obj).parent().parent().remove();
     }
 
+    $(function () {
+        $('#emptytable').click( function() {
+            $( '#wordlist > tbody').empty();
+            $( '#kanzi').val('');
+            $( '#hiragana').val('');
+            $( '#korean').val('');
+        });
+    });
+
+    function sendlist() { // 변환 함수
+        var table = document.getElementById('wordlist');
+        var data = [];
+
+        var headers = [];
+        for(var i=0; i<table.rows[0].cells.length; i++) {
+            headers[i] = table.rows[0].cells[i].innerHTML.toLowerCase().replace(/ /gi,'');
+        }
+
+        for(var i=1; i<table.rows.length; i++) {
+            var tableRow = table.rows[i];
+            var rowData = {};
+
+            for(var j=0; j<tableRow.cells.length - 1; j++) {
+                rowData[headers[j]] = tableRow.cells[j].innerHTML;
+            }
+            data.push(rowData);
+        }
+
+        $.post(
+            '/api/word',
+            {'wordlist':data,
+             'no':$("#no").val()
+            },
+            function (res) {
+                console.log(res);
+            }
+        )
+    }
+
+    /*Add Wordbook*/
     $("#submit").click(function (e) {
         var wb_name = $("#wb_name").val();
         e.preventDefault();
@@ -484,14 +557,14 @@
                 year: "numeric", month: "short", day: "numeric"
             };
             for(var i = 0; i < res.length; i++) {
-                $("#list").append('<div class="col-md-3 wow bounceInUp" data-wow-delay="0.2s" onmouseover="this.classList.toggle(hover);">' +
+                $("#list").append('<div class="col-md-3 wow bounceInUp" data-wow-delay="0.2s">' +
                     '                    <div class="team boxed-grey">' +
                     '                        <div class="row" id="card" name="card">' +
                     '                            <div class="card border-success mb-6" style="max-width: 25rem;">' +
                     '                                <div class="card-header bg-transparent border-success"><h3>'+res[i]['name']+'</h3></div>' +
                     '                                <div class="card-body text-success">' +
                     '                                    <h5 class="card-title"></h5>' +
-                    '                                    <p class="card-text"><button class="btn btn-info">단어 추가</button><br><p>' +
+                    '                                    <p class="card-text"><button class="btn btn-info" data-toggle="modal" data-target="#wordlist_modal" id="wordbook_no" onclick="set_wordbook_no(this)">ワード追加</button><br><p>' +
                     '                                </div>' +
                     '                                <div class="card-footer bg-transparent border-success">'+new Date(res[i]['created_at']).toLocaleDateString("ja-JP",options)+'</div>' +
                     '                            </div>' +
@@ -499,10 +572,14 @@
                     '                    </div>' +
                     '                </div>'
                 );
-                $()
+                $("#wordbook_no").attr("id",res[i]['no']);
             }
         });
     });
+
+    function set_wordbook_no(list) {
+       $("#no").val($(list).attr('id'));
+    }
 </script>
 </body>
 </html>
