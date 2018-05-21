@@ -530,7 +530,10 @@
              'no':$("#no").val()
             },
             function (res) {
-                console.log(res);
+                if (res == 'true'){
+                    alert('추가 완료!');
+                    window.location.reload();
+                } else console.log(res);
             }
         )
     }

@@ -43,13 +43,8 @@ class WordController extends Controller
      */
     public function store(Request $request)
     {
-        $kanzi      = '';
-        $hiragana   = '';
-        $korean     = '';
-
-        for ($i = 0; $i <= count($request->get('wordlist')); $i++) {
+        for ($i = 0; $i < count($request->get('wordlist')); $i++) {
             $word_info = array([
-                'no'            => '',
                 'wordbook'      => $request->get('no'),
                 'kanzi'         => $request->get('wordlist')[$i]['漢字'],
                 'hiragana'      => $request->get('wordlist')[$i]['ひらがな'],
