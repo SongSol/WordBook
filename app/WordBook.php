@@ -21,4 +21,9 @@ class WordBook extends Model
         return
         WordBook::orderBy('created_at','desc')->get();
     }
+
+    public function del_wordbook($no) {
+        WordBook::where('no',$no)->delete();
+        Word::where('wordbook',$no)->delete();
+    }
 }

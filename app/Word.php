@@ -11,4 +11,8 @@ class Word extends Model
     public function add_word (Array $word_info) {
         Word::insert($word_info);
     }
+
+    public function del_word ($no) {
+        Word::where('wordbook',$no)->delete();
+    }
 }

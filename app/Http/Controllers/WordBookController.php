@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Word;
 use App\WordBook;
 use Illuminate\Http\Request;
 
 class WordBookController extends Controller
 {
     private $wordbook_model;
+    private $word_model;
     public function __construct()
     {
         $this->wordbook_model = new WordBook();
+        $this->word_model = new Word();
     }
     /**
      * Display a listing of the resource.
@@ -84,8 +87,8 @@ class WordBookController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($no)
     {
-        //
+        $this->wordbook_model->del_wordbook($no);
     }
 }

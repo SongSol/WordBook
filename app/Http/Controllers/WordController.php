@@ -43,6 +43,7 @@ class WordController extends Controller
      */
     public function store(Request $request)
     {
+        $this->word->del_word($request->get('no'));
         for ($i = 0; $i < count($request->get('wordlist')); $i++) {
             $word_info = array([
                 'wordbook'      => $request->get('no'),
@@ -65,7 +66,7 @@ class WordController extends Controller
      */
     public function show($id)
     {
-        //
+        return response()->json(Word::where('wordbook',$id)->select('kanzi','hiragana','korean')->get());
     }
 
     /**
@@ -97,7 +98,7 @@ class WordController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy($no)
     {
         //
     }

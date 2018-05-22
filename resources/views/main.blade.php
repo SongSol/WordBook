@@ -175,12 +175,12 @@
     </div>
 </div>
 <!-- Add Word -->
-<div class="modal fade" id="wordlist_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" id="word_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content modal-lg">
             <div class="modal-header modal-lg">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">ワード追加</h4>
+                <h4 class="modal-title" id="myModalLabel">ワード管理</h4>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="no" value="">
@@ -190,12 +190,12 @@
                 <input type="button" class="btn-success btn-sm" value="追加" onclick="add_row()"><br>
                 <table class="table table-hover" id="wordlist">
                     <thead>
-                    <th>漢字</th>
-                    <th>ひらがな</th>
-                    <th>韓国語</th>
-                    <th>削除</th>
+                    <th style="text-align: center">漢字</th>
+                    <th style="text-align: center">ひらがな</th>
+                    <th style="text-align: center">韓国語</th>
+                    <th style="text-align: center">削除</th>
                     </thead>
-                    <tbody id="tbody"></tbody>
+                    <tbody id="tbody" style="text-align: center"></tbody>
                 </table>
             </div>
             <div class="modal-footer">
@@ -205,6 +205,33 @@
         </div>
     </div>
 </div>
+<!-- End Add Word -->
+<!-- Word List -->
+<div class="modal fade" id="wordlist_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-lg">
+            <div class="modal-header modal-lg">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">ワードリスト</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table table-hover" id="show_wordlist" border="1">
+                    <thead>
+                    <th style="text-align: center">漢字</th>
+                    <th style="text-align: center">ひらがな</th>
+                    <th style="text-align: center">韓国語</th>
+                    </thead>
+                    <tbody id="list_tbody" style="text-align: center"></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="emptytable">Close</button>
+                <button type="button" class="btn btn-primary" name="submit" id="submit" onclick="sendlist()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Word List -->
 
 <section id="wordbook" class="home-section text-center">
     <div class="heading-about">
@@ -567,7 +594,8 @@
                     '                                <div class="card-header bg-transparent border-success"><h3>'+res[i]['name']+'</h3></div>' +
                     '                                <div class="card-body text-success">' +
                     '                                    <h5 class="card-title"></h5>' +
-                    '                                    <p class="card-text"><button class="btn btn-info" data-toggle="modal" data-target="#wordlist_modal" id="wordbook_no" onclick="set_wordbook_no(this)">ワード追加</button><br><p>' +
+                    '                                    <p class="card-text"><button class="btn btn-info" data-toggle="modal" data-target="#word_modal" id="wordbook_no" onclick="word_manage(this)">ワード管理</button><br><p>' +
+                    '                                    <p class="card-text"><button class="btn btn-info" data-toggle="modal" data-target="#wordlist_modal" id="wordbook_no" onclick="show_word_list(this)">ワードリスト</button><br><p>' +
                     '                                </div>' +
                     '                                <div class="card-footer bg-transparent border-success">'+new Date(res[i]['created_at']).toLocaleDateString("ja-JP",options)+'</div>' +
                     '                            </div>' +
@@ -580,8 +608,38 @@
         });
     });
 
-    function set_wordbook_no(list) {
-       $("#no").val($(list).attr('id'));
+    function word_manage(list) {
+        $("#no").val($(list).attr('id'));
+        $.get('/api/word/' + $("#no").val(),null,function (res) {
+            var tbody = document.getElementById('tbody');
+            for(var i = 0; i < res.length; i++) {
+                var row = tbody.insertRow(tbody.rows.length);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                var cell4 = row.insertCell(3);
+                cell1.innerHTML = res[i]['kanzi'];
+                cell2.innerHTML = res[i]['hiragana'];
+                cell3.innerHTML = res[i]['korean'];
+                cell4.innerHTML = '<th style="text-align: center"><input type="button" class="btn-danger btn-sm" value="削除" onclick="del_row(this)"></th>';
+            }
+        });
+    }
+
+    function show_word_list(list) {
+        $("#no").val($(list).attr('id'));
+        $.get('/api/word/' + $("#no").val(),null,function (res) {
+            var list_tbody = document.getElementById('list_tbody');
+            for(var i = 0; i < res.length; i++) {
+                var row = list_tbody.insertRow(list_tbody.rows.length);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                cell1.innerHTML = res[i]['kanzi'];
+                cell2.innerHTML = res[i]['hiragana'];
+                cell3.innerHTML = res[i]['korean'];
+            }
+        });
     }
 </script>
 </body>
