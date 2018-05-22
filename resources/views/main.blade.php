@@ -595,7 +595,7 @@
                     '                                <div class="card-body text-success">' +
                     '                                    <h5 class="card-title"></h5>' +
                     '                                    <p class="card-text"><button class="btn btn-info" data-toggle="modal" data-target="#word_modal" id="wordbook_no" onclick="word_manage(this)">ワード管理</button><br><p>' +
-                    '                                    <p class="card-text"><button class="btn btn-info" data-toggle="modal" data-target="#wordlist_modal" id="wordbook_no" onclick="show_word_list(this)">ワードリスト</button><br><p>' +
+                    '                                    <p class="card-text"><button class="btn btn-info" data-toggle="modal" data-target="#wordlist_modal" id="wordbook_list_no" onclick="show_word_list(this)">ワードリスト</button><br><p>' +
                     '                                </div>' +
                     '                                <div class="card-footer bg-transparent border-success">'+new Date(res[i]['created_at']).toLocaleDateString("ja-JP",options)+'</div>' +
                     '                            </div>' +
@@ -604,12 +604,14 @@
                     '                </div>'
                 );
                 $("#wordbook_no").attr("id",res[i]['no']);
+                $("#wordbook_list_no").attr("id",res[i]['no']);
             }
         });
     });
 
     function word_manage(list) {
         $("#no").val($(list).attr('id'));
+        console.log($("#no").val());
         $.get('/api/word/' + $("#no").val(),null,function (res) {
             var tbody = document.getElementById('tbody');
             for(var i = 0; i < res.length; i++) {
@@ -626,8 +628,9 @@
         });
     }
 
-    function show_word_list(list) {
-        $("#no").val($(list).attr('id'));
+    function show_word_list(list_num) {
+        $( '#show_wordlist > tbody').empty();
+        $("#no").val($(list_num).attr('id'));
         $.get('/api/word/' + $("#no").val(),null,function (res) {
             var list_tbody = document.getElementById('list_tbody');
             for(var i = 0; i < res.length; i++) {
