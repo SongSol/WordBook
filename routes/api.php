@@ -22,3 +22,5 @@ Route::resource('/wordbook','WordBookController');
 Route::resource('/word','WordController');
 
 Route::get('/search/{word}','DictionaryController@search');
+
+Route::post('/trans','DictionaryController@translate');

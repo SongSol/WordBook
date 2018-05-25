@@ -13,7 +13,6 @@
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-
     <!-- Fonts -->
     <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="css/animate.css" rel="stylesheet" />
@@ -278,85 +277,75 @@
             </div>
         </div>
     </div>
+
+    <!-- Search -->
     <div class="container">
         <div class="row">
             <div class="col-lg-2 col-lg-offset-5">
                 <hr class="marginbot-50">
             </div>
         </div>
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="boxed-grey">
-
-                    <div id="sendmessage">Your message has been sent. Thank you!</div>
-                    <div id="errormessage"></div>
-                    <form id="contact-form" action="" method="post" role="form" class="contactForm">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">
-                                        Name</label>
-                                    <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-                                    <div class="validation"></div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">
-                                        Email Address</label>
-                                    <div class="form-group">
-                                        <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
-                                        <div class="validation"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="subject">
-                                        Subject</label>
-                                    <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-                                    <div class="validation"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">
-                                        Message</label>
-                                    <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
-                                    <div class="validation"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-skin pull-right" id="btnContactUs">
-                                    Send Message</button>
-                            </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="custom-search-input">
+                        <div class="input-group col-md-12">
+                            <input type="text" class="form-control input-lg" id="keyword" placeholder="Search"/>
+                            <span class="input-group-btn">
+                                <button class="btn btn-success btn-lg" type="button" id="search" onclick="search()">
+                                    <i class="glyphicon glyphicon-search"></i>
+                                </button>
+                            </span>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
+        </div><br>
+        <!-- End Search -->
 
-            <div class="col-lg-4">
-                <div class="widget-contact">
-                    <h5>Main Office</h5>
+        <!-- Search Result -->
+        <div class="col-lg-8">
+            <div class="boxed-grey" id="search_result">
+            </div>
+        </div><br>
+        <!-- End Search Result -->
 
-                    <address>
-                        <strong>SongSol</strong><br>
-                        <abbr title="Phone">P:</abbr> 010-2680-5634
-                    </address>
-
-                    <address>
-                        <strong>Email</strong><br>
-                        <a href="mailto:#">email.name@example.com</a>
-                    </address>
-                    <address>
-                        <strong>We're on social networks</strong><br>
-                        <ul class="company-social">
-                            <li class="social-facebook"><a href="#" target="_blank"><i class="fa fa-facebook"></i></a></li>
-                            <li class="social-twitter"><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
-                            <li class="social-dribble"><a href="#" target="_blank"><i class="fa fa-dribbble"></i></a></li>
-                            <li class="social-google"><a href="#" target="_blank"><i class="fa fa-google-plus"></i></a></li>
-                        </ul>
-                    </address>
-
+        <!-- Translate -->
+        <div class="heading-contact">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="wow bounceInDown" data-wow-delay="0.4s">
+                            <div class="section-heading">
+                                <h2>Translate</h2>
+                                <i class="fa fa-2x fa-angle-down"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-lg-2 col-lg-offset-5">
+                <hr class="marginbot-50">
+            </div>
+        </div>
+        <select class="form-control" id="selectBox">
+            <option value="jp">日本語　→　韓国語</option>
+            <option value="kr">韓国語　→　日本語</option>
+        </select>
+        <textarea class="form-control" rows="3" style="resize: vertical;" id="textfield"></textarea><br>
+        <button class="btn btn-success btn-lg btn-block" type="button" onclick="translate_text()">
+            <i class="glyphicon glyphicon-globe"></i>
+        </button><br><br>
+        <!-- End Translate -->
+
+        <!-- Translate Result -->
+        <div class="col-lg-12">
+            <div class="boxed-grey" id="translate_result">
+            </div>
+        </div><br>
+        <!-- End Translate Result -->
 
     </div>
 </section>
@@ -371,7 +360,6 @@
                         <div class="section-heading">
                             <h2>テスト</h2>
                             <i class="fa fa-2x fa-angle-down"></i>
-
                         </div>
                     </div>
                 </div>
@@ -643,6 +631,30 @@
                 cell3.innerHTML = res[i]['korean'];
             }
         });
+    }
+
+    function search() {
+        var keyword = document.getElementById("keyword").value;
+        $.get(
+            '/api/search/' + keyword,
+            function (res) {
+                console.log(res);
+                $("#search_result").html(res);
+            });
+    }
+
+    function translate_text() {
+        var text = document.getElementById("textfield").value;
+        var select = $("#selectBox option:selected").val();
+
+        $.post(
+            '/api/trans',
+            {'text': text,
+             'select':select},
+            function (res) {
+                console.log(res['message']['result']['translatedText']);
+                $("#translate_result").html(res['message']['result']['translatedText']);
+            });
     }
 </script>
 </body>
