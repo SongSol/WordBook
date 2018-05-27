@@ -232,6 +232,42 @@
 </div>
 <!-- End Word List -->
 
+<!-- Test Modal -->
+<div class="modal fade" id="test_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content modal-lg">
+            <div class="modal-header modal-lg">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">テスト</h4>
+            </div>
+            <div class="modal-body">
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="check1" value="kanzi" onclick="start_test(this)"> 漢字
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="check2" value="hiragana"> ひらがな
+                </label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" id="check3" value="korean"> 韓国語
+                </label>
+                <table class="table table-hover" id="test_wordlist" border="1">
+                    <thead>
+                    <th style="text-align: center">漢字</th>
+                    <th style="text-align: center">ひらがな</th>
+                    <th style="text-align: center">韓国語</th>
+                    </thead>
+                    <tbody id="test_tbody" style="text-align: center"></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-info" id="start_test" onclick="start_test()">Start</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="emptytable">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- End Test Modal -->
+
 <section id="wordbook" class="home-section text-center">
     <div class="heading-about">
         <div class="container">
@@ -346,112 +382,9 @@
             </div>
         </div><br>
         <!-- End Translate Result -->
-
     </div>
 </section>
 <!-- /Section: search -->
-<!-- Section: exam -->
-<section id="exam" class="home-section text-center">
-    <div class="heading-contact">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-lg-offset-2">
-                    <div class="wow bounceInDown" data-wow-delay="0.4s">
-                        <div class="section-heading">
-                            <h2>テスト</h2>
-                            <i class="fa fa-2x fa-angle-down"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="container">
-
-        <div class="row">
-            <div class="col-lg-2 col-lg-offset-5">
-                <hr class="marginbot-50">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-lg-8">
-                <div class="boxed-grey">
-
-                    <div id="sendmessage">Your message has been sent. Thank you!</div>
-                    <div id="errormessage"></div>
-                    <form id="contact-form" action="" method="post" role="form" class="contactForm">
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">
-                                        Name</label>
-                                    <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" data-rule="minlen:4" data-msg="Please enter at least 4 chars" />
-                                    <div class="validation"></div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">
-                                        Email Address</label>
-                                    <div class="form-group">
-                                        <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" data-rule="email" data-msg="Please enter a valid email" />
-                                        <div class="validation"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="subject">
-                                        Subject</label>
-                                    <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" data-rule="minlen:4" data-msg="Please enter at least 8 chars of subject" />
-                                    <div class="validation"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group">
-                                    <label for="name">
-                                        Message</label>
-                                    <textarea class="form-control" name="message" rows="5" data-rule="required" data-msg="Please write something for us" placeholder="Message"></textarea>
-                                    <div class="validation"></div>
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <button type="submit" class="btn btn-skin pull-right" id="btnContactUs">
-                                    Send Message</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-            <div class="col-lg-4">
-                <div class="widget-contact">
-                    <h5>Main Office</h5>
-
-                    <address>
-                        <strong>Squas Design, Inc.</strong><br>
-                        Tower 795 Folsom Ave, Beautiful Suite 600<br>
-                        San Francisco, CA 94107<br>
-                        <abbr title="Phone">P:</abbr> (123) 456-7890
-                    </address>
-
-                    <address>
-                        <strong>Email</strong><br>
-                        <a href="mailto:#">email.name@example.com</a>
-                    </address>
-                    <address>
-                        <strong>We're on social networks</strong><br>
-                        <ul class="company-social">
-                            <li class="social-facebook"><a href="#" target="_blank"><i class="fa fa-facebook"></i></a></li>
-                            <li class="social-twitter"><a href="#" target="_blank"><i class="fa fa-twitter"></i></a></li>
-                            <li class="social-dribble"><a href="#" target="_blank"><i class="fa fa-dribbble"></i></a></li>
-                            <li class="social-google"><a href="#" target="_blank"><i class="fa fa-google-plus"></i></a></li>
-                        </ul>
-                    </address>
-
-                </div>
-            </div>
-        </div>
-
-    </div>
-</section>
-<!-- /Section: exam -->
 <footer>
     <div class="container">
         <div class="row">
@@ -553,6 +486,59 @@
         )
     }
 
+    /*Test*/
+    function test(list_num) {
+        $( '#show_wordlist > tbody').empty();
+        $("#no").val($(list_num).attr('id'));
+        this.no = $("#no").val();
+    }
+
+    function start_test(val) {
+        console.log(val.value);
+        $( '#test_wordlist > tbody').empty();
+        $.get('/api/test/' + $("#no").val(),null,function (res) {
+            if (document.getElementById('lang').value == 'basic') {
+                alert('시험 칠 언어를 선택해 주세요!');
+            }
+            else if (document.getElementById('lang').value == 'kanzi') {
+                var test_tbody = document.getElementById('test_tbody');
+                for(var i = 0; i < res.length; i++) {
+                    var row = test_tbody.insertRow(test_tbody.rows.length);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+                    cell1.innerHTML = res[i]['kanzi'];
+                    cell2.innerHTML = res[i]['hiragana'];
+                    cell3.innerHTML = res[i]['korean'];
+                }
+            }
+            else if (document.getElementById('lang').value == 'hiragana') {
+                var test_tbody = document.getElementById('test_tbody');
+                for(var i = 0; i < res.length; i++) {
+                    var row = test_tbody.insertRow(test_tbody.rows.length);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+                    cell1.innerHTML = res[i]['kanzi'];
+                    cell2.innerHTML = res[i]['hiragana'];
+                    cell3.innerHTML = res[i]['korean'];
+                }
+            }
+            else if (document.getElementById('lang').value == 'korean') {
+                var test_tbody = document.getElementById('test_tbody');
+                for(var i = 0; i < res.length; i++) {
+                    var row = test_tbody.insertRow(test_tbody.rows.length);
+                    var cell1 = row.insertCell(0);
+                    var cell2 = row.insertCell(1);
+                    var cell3 = row.insertCell(2);
+                    cell1.innerHTML = res[i]['kanzi'];
+                    cell2.innerHTML = res[i]['hiragana'];
+                    cell3.innerHTML = res[i]['korean'];
+                }
+            }
+        });
+    };
+
     /*Add Wordbook*/
     $("#submit").click(function (e) {
         var wb_name = $("#wb_name").val();
@@ -584,6 +570,7 @@
                     '                                    <h5 class="card-title"></h5>' +
                     '                                    <p class="card-text"><button class="btn btn-info" data-toggle="modal" data-target="#word_modal" id="wordbook_no" onclick="word_manage(this)">ワード管理</button><br><p>' +
                     '                                    <p class="card-text"><button class="btn btn-info" data-toggle="modal" data-target="#wordlist_modal" id="wordbook_list_no" onclick="show_word_list(this)">ワードリスト</button><br><p>' +
+                    '                                    <p class="card-text"><button class="btn btn-info" data-toggle="modal" data-target="#test_modal" id="test_no" onclick="test(this)">テスト</button><br><p>' +
                     '                                </div>' +
                     '                                <div class="card-footer bg-transparent border-success">'+new Date(res[i]['created_at']).toLocaleDateString("ja-JP",options)+'</div>' +
                     '                            </div>' +
@@ -593,6 +580,7 @@
                 );
                 $("#wordbook_no").attr("id",res[i]['no']);
                 $("#wordbook_list_no").attr("id",res[i]['no']);
+                $("#test_no").attr("id",res[i]['no']);
             }
         });
     });
@@ -617,6 +605,7 @@
     }
 
     function show_word_list(list_num) {
+        console.log(list_num);
         $( '#show_wordlist > tbody').empty();
         $("#no").val($(list_num).attr('id'));
         $.get('/api/word/' + $("#no").val(),null,function (res) {
@@ -655,6 +644,16 @@
                 console.log(res['message']['result']['translatedText']);
                 $("#translate_result").html(res['message']['result']['translatedText']);
             });
+    }
+
+    function shuffle(a) {
+        var j, x, i;
+        for (i = a.length; i; i -= 1) {
+            j = Math.floor(Math.random() * i);
+            x = a[i - 1];
+            a[i - 1] = a[j];
+            a[j] = x;
+        }
     }
 </script>
 </body>

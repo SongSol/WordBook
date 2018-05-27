@@ -24,3 +24,5 @@ Route::resource('/word','WordController');
 Route::get('/search/{word}','DictionaryController@search');
 
 Route::post('/trans','DictionaryController@translate');
+
+Route::get('/test/{word}','WordController@rand_show');

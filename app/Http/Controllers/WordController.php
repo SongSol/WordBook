@@ -102,4 +102,8 @@ class WordController extends Controller
     {
         //
     }
+
+    public function rand_show($no) {
+        return response()->json(Word::where('wordbook',$no)->select('kanzi','hiragana','korean')->inRandomOrder()->get());
+    }
 }
