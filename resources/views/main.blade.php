@@ -52,7 +52,6 @@
                 <li><a href="#service">Service</a></li>
                 <li><a href="#wordbook">Wordbook</a></li>
                 <li><a href="#search">Search</a></li>
-                <li><a href="#exam">Exam</a></li>
             </ul>
         </div>
         <!-- /.navbar-collapse -->
@@ -141,11 +140,11 @@
                 <div class="wow fadeInRight" data-wow-delay="0.2s">
                     <div class="service-box">
                         <div class="service-icon">
-                            <img src="img/icons/question.png" alt="" />
+                            <img src="img/icons/language.png" alt="" />
                         </div>
                         <div class="service-desc">
-                            <h5>?????</h5>
-                            <p>Vestibulum tincidunt enim in pharetra malesuada. Duis semper magna metus electram accommodare.</p>
+                            <h5>translate</h5>
+                            <p>You can translation.</p>
                         </div>
                     </div>
                 </div>
@@ -225,7 +224,6 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="emptytable">Close</button>
-                <button type="button" class="btn btn-primary" name="submit" id="submit" onclick="sendlist()">Submit</button>
             </div>
         </div>
     </div>
@@ -241,26 +239,28 @@
                 <h4 class="modal-title" id="myModalLabel">テスト</h4>
             </div>
             <div class="modal-body">
-                <label class="checkbox-inline">
-                    <input type="checkbox" id="check1" value="kanzi" onclick="start_test(this)"> 漢字
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" id="check2" value="hiragana"> ひらがな
-                </label>
-                <label class="checkbox-inline">
-                    <input type="checkbox" id="check3" value="korean"> 韓国語
-                </label>
+                <form>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="check1" value="kanzi"> 漢字
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="check2" value="hiragana"> ひらがな
+                    </label>
+                    <label class="checkbox-inline">
+                        <input type="checkbox" id="check3" value="korean"> 韓国語
+                    </label>
+                </form>
                 <table class="table table-hover" id="test_wordlist" border="1">
                     <thead>
-                    <th style="text-align: center">漢字</th>
-                    <th style="text-align: center">ひらがな</th>
-                    <th style="text-align: center">韓国語</th>
+                    <th style="text-align: center" id="test_kanzi">漢字</th>
+                    <th style="text-align: center" id="test_hiragana">ひらがな</th>
+                    <th style="text-align: center" id="test_korean">韓国語</th>
                     </thead>
                     <tbody id="test_tbody" style="text-align: center"></tbody>
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-info" id="start_test" onclick="start_test()">Start</button>
+                <button type="button" class="btn btn-info" id="start_test" onclick="start_test(this)">Start</button>
                 <button type="button" class="btn btn-default" data-dismiss="modal" id="emptytable">Close</button>
             </div>
         </div>
@@ -340,10 +340,10 @@
         <!-- End Search -->
 
         <!-- Search Result -->
-        <div class="col-lg-8">
+        <div class="col-lg-12">
             <div class="boxed-grey" id="search_result">
             </div>
-        </div><br>
+        </div>
         <!-- End Search Result -->
 
         <!-- Translate -->
@@ -367,8 +367,8 @@
             </div>
         </div>
         <select class="form-control" id="selectBox">
-            <option value="jp">日本語　→　韓国語</option>
-            <option value="kr">韓国語　→　日本語</option>
+            <option value="jp">韓国語　→　日本語</option>
+            <option value="kr">日本語　→　韓国語</option>
         </select>
         <textarea class="form-control" rows="3" style="resize: vertical;" id="textfield"></textarea><br>
         <button class="btn btn-success btn-lg btn-block" type="button" onclick="translate_text()">
@@ -424,7 +424,8 @@
 
 
 <script>
-    var now_wordbook = 0;
+    var list_word = [];
+    var colindex = '';
     var no = 1;
     function add_row() {
         var tbody   = document.getElementById('tbody');
@@ -493,49 +494,60 @@
         this.no = $("#no").val();
     }
 
+    $("#check1").change(function () {
+        if ($("#check1").is(":checked")) {
+            colindex = $(this).parent().children().index(this);
+            $('table th:nth-child('+(colindex + 1) + ')').show();
+            $('table td:nth-child('+(colindex + 1) + ')').show();
+        } else {
+            colindex = $(this).parent().children().index(this);
+            $('table th:nth-child('+(colindex + 1) + ')').hide();
+            $('table td:nth-child('+(colindex + 1) + ')').hide();
+        };
+    });
+    $("#check2").change(function () {
+        if ($("#check2").is(":checked")) {
+            colindex = $(this).parent().children().index(this);
+            $('table th:nth-child('+(colindex + 2) + ')').show();
+            $('table td:nth-child('+(colindex + 2) + ')').show();
+        } else {
+            colindex = $(this).parent().children().index(this);
+            $('table th:nth-child('+(colindex + 2) + ')').hide();
+            $('table td:nth-child('+(colindex + 2) + ')').hide();
+        };
+    });
+    $("#check3").change(function () {
+        if ($("#check3").is(":checked")) {
+            var colindex = $(this).parent().children().index(this);
+            $('table th:nth-child('+(colindex + 3) + ')').show();
+            $('table td:nth-child('+(colindex + 3) + ')').show();
+        } else {
+            colindex = $(this).parent().children().index(this);
+            $('table th:nth-child('+(colindex + 3) + ')').hide();
+            $('table td:nth-child('+(colindex + 3) + ')').hide();
+        };
+    });
+
     function start_test(val) {
-        console.log(val.value);
+        $("#check1").prop("checked",true);
+        $("#check2").prop("checked",true);
+        $("#check3").prop("checked",true);
         $( '#test_wordlist > tbody').empty();
         $.get('/api/test/' + $("#no").val(),null,function (res) {
-            if (document.getElementById('lang').value == 'basic') {
-                alert('시험 칠 언어를 선택해 주세요!');
+            list_word = res;
+            var test_tbody = document.getElementById('test_tbody');
+            for(var i = 0; i < res.length; i++) {
+                var row = test_tbody.insertRow(test_tbody.rows.length);
+                var cell1 = row.insertCell(0);
+                var cell2 = row.insertCell(1);
+                var cell3 = row.insertCell(2);
+                cell1.innerHTML = res[i]['kanzi'];
+                cell2.innerHTML = res[i]['hiragana'];
+                cell3.innerHTML = res[i]['korean'];
             }
-            else if (document.getElementById('lang').value == 'kanzi') {
-                var test_tbody = document.getElementById('test_tbody');
-                for(var i = 0; i < res.length; i++) {
-                    var row = test_tbody.insertRow(test_tbody.rows.length);
-                    var cell1 = row.insertCell(0);
-                    var cell2 = row.insertCell(1);
-                    var cell3 = row.insertCell(2);
-                    cell1.innerHTML = res[i]['kanzi'];
-                    cell2.innerHTML = res[i]['hiragana'];
-                    cell3.innerHTML = res[i]['korean'];
-                }
-            }
-            else if (document.getElementById('lang').value == 'hiragana') {
-                var test_tbody = document.getElementById('test_tbody');
-                for(var i = 0; i < res.length; i++) {
-                    var row = test_tbody.insertRow(test_tbody.rows.length);
-                    var cell1 = row.insertCell(0);
-                    var cell2 = row.insertCell(1);
-                    var cell3 = row.insertCell(2);
-                    cell1.innerHTML = res[i]['kanzi'];
-                    cell2.innerHTML = res[i]['hiragana'];
-                    cell3.innerHTML = res[i]['korean'];
-                }
-            }
-            else if (document.getElementById('lang').value == 'korean') {
-                var test_tbody = document.getElementById('test_tbody');
-                for(var i = 0; i < res.length; i++) {
-                    var row = test_tbody.insertRow(test_tbody.rows.length);
-                    var cell1 = row.insertCell(0);
-                    var cell2 = row.insertCell(1);
-                    var cell3 = row.insertCell(2);
-                    cell1.innerHTML = res[i]['kanzi'];
-                    cell2.innerHTML = res[i]['hiragana'];
-                    cell3.innerHTML = res[i]['korean'];
-                }
-            }
+            $('table th:nth-child('+(colindex + 1) + ')').show();
+            $('table th:nth-child('+(colindex + 2) + ')').show();
+            $('table th:nth-child('+(colindex + 3) + ')').show();
         });
     };
 
@@ -571,6 +583,7 @@
                     '                                    <p class="card-text"><button class="btn btn-info" data-toggle="modal" data-target="#word_modal" id="wordbook_no" onclick="word_manage(this)">ワード管理</button><br><p>' +
                     '                                    <p class="card-text"><button class="btn btn-info" data-toggle="modal" data-target="#wordlist_modal" id="wordbook_list_no" onclick="show_word_list(this)">ワードリスト</button><br><p>' +
                     '                                    <p class="card-text"><button class="btn btn-info" data-toggle="modal" data-target="#test_modal" id="test_no" onclick="test(this)">テスト</button><br><p>' +
+                    '                                    <p class="card-text"><button class="btn btn-info" id="delete_wordbook" onclick="del_wordbook(this)">ワードブック削除</button><br><p>' +
                     '                                </div>' +
                     '                                <div class="card-footer bg-transparent border-success">'+new Date(res[i]['created_at']).toLocaleDateString("ja-JP",options)+'</div>' +
                     '                            </div>' +
@@ -585,9 +598,18 @@
         });
     });
 
+    function del_wordbook(list_num) {
+        $("#no").val($(list).attr('id'));
+        $.get('/api/word/' + $("#no").val(),null,function (res) {
+            if (res == 'true') {
+                alert('삭제 완료');
+                window.location.reload();
+            }
+        })
+    }
+
     function word_manage(list) {
         $("#no").val($(list).attr('id'));
-        console.log($("#no").val());
         $.get('/api/word/' + $("#no").val(),null,function (res) {
             var tbody = document.getElementById('tbody');
             for(var i = 0; i < res.length; i++) {
